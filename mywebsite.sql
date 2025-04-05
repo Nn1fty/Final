@@ -1,9 +1,9 @@
-CREATE DATABASE my_website_db;
-CREATE USER 'my_user'@'localhost' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON my_website_db.* TO 'my_user'@'localhost';
+CREATE DATABASE mywebsite;
+CREATE USER 'neils'@'localhost' IDENTIFIED BY 'nifty';
+GRANT ALL PRIVILEGES ON mywebsite.* TO 'neils'@'localhost';
 FLUSH PRIVILEGES;
 
-USE my_website_db;
+USE mywebsite;
 
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
