@@ -1,21 +1,19 @@
-require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
-const axios = require('axios');
+require('dotenv').config();
 
-// Create an express app
 const app = express();
 const port = 3000;
 
-// MySQL connection
+// Create MySQL connection
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
 });
 
-// Connect to the MySQL database
+// Connect to MySQL
 db.connect((err) => {
   if (err) {
     console.error('error connecting to MySQL:', err);
@@ -24,32 +22,21 @@ db.connect((err) => {
   console.log('Connected to MySQL!');
 });
 
-// Set up a route to interact with the database
-app.get('/users', (req, res) => {
-  db.query('SELECT * FROM users', (err, results) => {
+// API route to get users
+app.get('/api/users', (req, res) => {
+  const query = 'SELECT * FROM users';  // Change this based on your table name
+  db.query(query, (err, results) => {
     if (err) {
-      console.error(err);
+      console.error('Error fetching users:', err);
       res.status(500).send('Error fetching users');
       return;
     }
-    res.json(results);
+    res.json(results);  // Send the results as JSON
   });
 });
 
-// Set up a route to fetch data from a GitHub repository
-app.get('/github/repos', async (req, res) => {
-  try {
-    const response = await axios.get('https://api.github.com/user/repos', {
-      headers: {
-        Authorization: `token ${process.env.GITHUB_TOKEN}`
-      }
-    });
-    res.json(response.data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error fetching GitHub repositories');
-  }
-});
+// Serve static files (your front-end) from the public folder
+app.use(express.static('public'));
 
 // Start the server
 app.listen(port, () => {
